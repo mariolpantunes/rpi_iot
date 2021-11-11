@@ -1,0 +1,76 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>DHT11</title>
+  <meta name="author" content="Mário Antunes">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+  <script src="https://cdn.plot.ly/plotly-2.4.2.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+  <div id='plot' style='width:600px;height:250px;'></div>
+
+  <script>
+    let mqtt = new Paho.MQTT.Client('192.168.0.101', 9001, 'dht11mort');
+
+    let trace_temp = {x:[],y: [],
+      mode: 'lines+markers',
+      type: 'scatter'
+    };
+    
+    let trace_hum = {x:[],y: [],
+      mode: 'lines+markers',
+      type: 'scatter'
+    };
+    
+    let data = [trace_temp, trace_hum];
+    Plotly.newPlot('plot', data);
+      
+    // set callback handlers
+    mqtt.onConnectionLost = onConnectionLost;
+    mqtt.onMessageArrived = onMessageArrived;
+      
+    let options = {timeout:3, onSuccess: onConnect};
+    mqtt.connect(options);
+    
+    function onConnect(){
+        console.log('Connected...');
+        mqtt.subscribe('temperature');
+        mqtt.subscribe('humidity');
+    }
+
+    // called when the client loses its connection
+    function onConnectionLost(responseObject) {
+      if (responseObject.errorCode !== 0) {
+        console.log("onConnectionLost:"+responseObject.errorMessage);
+      }
+    }
+
+    // called when a message arrives
+    function onMessageArrived(message) {
+      let time = new Date();
+    
+      console.log("onMessageArrived("+message.destinationName+"):"+message.payloadString);
+      
+      let olderTime = time.setMinutes(time.getMinutes() - 1);
+      let futureTime = time.setMinutes(time.getMinutes() + 1);
+      let minuteView = {xaxis: {type: 'date',range: [olderTime,futureTime]}};
+      
+      Plotly.relayout('plot', minuteView);
+      
+      let update = {x:  [[time]],y: [[parseFloat(message.payloadString)]]};
+      if (message.destinationName === 'temperature') {
+        Plotly.extendTraces('plot', update, [0])
+      } else {
+        Plotly.extendTraces('plot', update, [1])
+      }
+    }
+  </script>
+</body>
+</html>
