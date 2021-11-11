@@ -17,7 +17,7 @@
   <div id='plot' style='width:600px;height:250px;'></div>
 
   <script>
-    let mqtt = new Paho.MQTT.Client('192.168.0.101', 9001, 'dht11mort');
+    let mqtt = new Paho.MQTT.Client('localhost', 9001, 'dht11');
 
     let trace_temp = {x:[],y: [],
       mode: 'lines+markers',

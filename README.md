@@ -33,15 +33,22 @@ protocol websockets
 sudo systemctl start mosquitto
 ```
 
-5. Create a virtual enviroment and run the code
+5. Install nginx to display the webpage
+
+```
+sudo apt install nginx-light
+cd /var/www/html/
+sudo ln -s /home/pi/git/rpi_iot/web/index.html index.html
+```
+
+6. Create a virtual enviroment and run the code
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-CFLAGS="-fcommon" pip install -r requirements.txt
-python main.py
+CFLAGS="-fcommon" pip install -r rpi/requirements.txt
+python rpi/main.py
 ```
-
 
 ## Authors
 
