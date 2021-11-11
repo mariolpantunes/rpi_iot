@@ -50,6 +50,8 @@ CFLAGS="-fcommon" pip install -r rpi/requirements.txt
 python rpi/main.py
 ```
 
+7. Explore the MQTT messages with the application [MQTT-Explorer](http://mqtt-explorer.com/)
+
 ## Authors
 
 * **Mário Antunes** - [mariolpantunes](https://github.com/mariolpantunes)
