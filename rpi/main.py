@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 # Global variable to control the flow
 done = False
-
+refresh = 2
 
 def signal_handler(sig, frame):
     logger.warning('You pressed Ctrl+C!')
@@ -43,13 +43,16 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    logger.info(f'Received {msg.payload.decode()} from {msg.topic} topic')
+    payload = msg.payload.decode()
+    topic = msg.topic
+    logger.info(f'Received {payload} from {topic} topic')
+    refresh = float(payload)
 
 
 def main(args):
     # Graceful shutdown
     signal.signal(signal.SIGINT, signal_handler)
-    
+
     # Initial the dht device, with data pin connected to:
     dhtDevice = adafruit_dht.DHT11(board.D4)
 
@@ -58,6 +61,7 @@ def main(args):
     client.on_connect = on_connect
     client.on_message = on_message
     client.connect(args.u)
+    client.loop_start()
 
     while not done:
         try:
@@ -76,7 +80,7 @@ def main(args):
             dhtDevice.exit()
             raise error
 
-        time.sleep(2.0)
+        time.sleep(refresh)
 
 
 if __name__ == '__main__':
