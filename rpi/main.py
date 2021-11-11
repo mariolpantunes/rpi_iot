@@ -33,6 +33,19 @@ def signal_handler(sig, frame):
     done = True
 
 
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        logger.info('Connected to MQTT Broker!')
+        # Subscribe the command topic
+        client.subscribe('dht11/cmd')
+    else:
+        logger.warning(f'Failed to connect, return code {rc}')
+
+
+def on_message(client, userdata, msg):
+    logger.info(f'Received {msg.payload.decode()} from {msg.topic} topic')
+
+
 def main(args):
     # Graceful shutdown
     signal.signal(signal.SIGINT, signal_handler)
@@ -42,6 +55,7 @@ def main(args):
 
     # Create a MQTT client
     client = mqtt.Client()
+    client.on_message = on_message
     client.connect(args.u)
 
     while not done:
@@ -50,8 +64,8 @@ def main(args):
             temperature = dhtDevice.temperature
             humidity = dhtDevice.humidity
             logger.info(f'Temperature {temperature:.1f} C Humidity {humidity}%')
-            client.publish('temperature', payload=temperature, qos=0, retain=False)
-            client.publish('humidity', payload=humidity, qos=0, retain=False)
+            client.publish('dht11/temperature', payload=temperature, qos=0, retain=False)
+            client.publish('dht11/humidity', payload=humidity, qos=0, retain=False)
         except RuntimeError as error:
             # Errors happen fairly often, DHT's are hard to read, just keep going
             logger.warning(error.args[0])

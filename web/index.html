@@ -41,8 +41,8 @@
     
     function onConnect(){
         console.log('Connected...');
-        mqtt.subscribe('temperature');
-        mqtt.subscribe('humidity');
+        mqtt.subscribe('dht11/temperature');
+        mqtt.subscribe('dht11/humidity');
     }
 
     // called when the client loses its connection
