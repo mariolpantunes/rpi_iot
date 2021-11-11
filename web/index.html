@@ -65,7 +65,7 @@
       Plotly.relayout('plot', minuteView);
       
       let update = {x:  [[time]],y: [[parseFloat(message.payloadString)]]};
-      if (message.destinationName === 'temperature') {
+      if (message.destinationName === 'dht11/temperature') {
         Plotly.extendTraces('plot', update, [0])
       } else {
         Plotly.extendTraces('plot', update, [1])
