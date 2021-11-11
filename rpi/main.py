@@ -43,6 +43,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
+    global refresh
     payload = msg.payload.decode()
     topic = msg.topic
     logger.info(f'Received {payload} from {topic} topic')
@@ -50,6 +51,8 @@ def on_message(client, userdata, msg):
 
 
 def main(args):
+    global refresh
+    
     # Graceful shutdown
     signal.signal(signal.SIGINT, signal_handler)
 
