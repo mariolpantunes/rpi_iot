@@ -55,6 +55,7 @@ def main(args):
 
     # Create a MQTT client
     client = mqtt.Client()
+    client.on_connect = on_connect
     client.on_message = on_message
     client.connect(args.u)
 
