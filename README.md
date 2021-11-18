@@ -53,6 +53,7 @@ sudo ln -s /home/pi/git/rpi_iot/web/index.html index.html
 7. Create a virtual enviroment and run the code
 
 ```bash
+cd ~/git/rpi_iot/
 python3 -m venv venv
 source venv/bin/activate
 CFLAGS="-fcommon" pip install -r rpi/requirements.txt
