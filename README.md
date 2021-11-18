@@ -4,20 +4,29 @@ Example code used at the 11th of November 2021 workshop.
 
 # Usage
 
-1. Install Mosquitto (MQTT broker)
+1. Install the git client and clone this repository
+
+```bash
+sudo apt install git
+mkdir ~/git
+cd ~/git
+git clone https://github.com/mariolpantunes/rpi_iot.git
+```
+
+2. Install Mosquitto (MQTT broker)
 
 ```bash
 sudo apt install mosquitto mosquitto-clients
 ```
 
-2. Stop the broker and edit the configuration file
+3. Stop the broker and edit the configuration file
 
 ```bash
 sudo systemctl stop mosquitto
 sudo nano /etc/mosquitto/mosquitto.conf
 ```
 
-3. Add the following lines:
+4. Add the following lines:
 
 ```
 allow_anonymous true
@@ -27,13 +36,13 @@ listener 9001 0.0.0.0
 protocol websockets
 ```
 
-4. Restart the broker
+5. Restart the broker
 
 ```bash
 sudo systemctl start mosquitto
 ```
 
-5. Install nginx to display the webpage
+6. Install nginx to display the webpage
 
 ```
 sudo apt install nginx-light
@@ -41,7 +50,7 @@ cd /var/www/html/
 sudo ln -s /home/pi/git/rpi_iot/web/index.html index.html
 ```
 
-6. Create a virtual enviroment and run the code
+7. Create a virtual enviroment and run the code
 
 ```bash
 python3 -m venv venv
@@ -50,7 +59,7 @@ CFLAGS="-fcommon" pip install -r rpi/requirements.txt
 python rpi/main.py
 ```
 
-7. Explore the MQTT messages with the application [MQTT-Explorer](http://mqtt-explorer.com/)
+8. Explore the MQTT messages with the application [MQTT-Explorer](http://mqtt-explorer.com/)
 
 ## Authors
 
