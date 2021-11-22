@@ -1,6 +1,6 @@
 # IoT (RPI)
 
-Example code used at the 25th of November 2021 workshop.
+Example code used at the 25th of November 2021 workshop (slides [here](presentation/Internet-of-cheap-Things.pdf)).
 
 # Usage
 
